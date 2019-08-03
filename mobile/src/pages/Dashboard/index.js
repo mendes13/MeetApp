@@ -5,6 +5,7 @@ import { addDays, subDays, isBefore, parseISO } from 'date-fns';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import api from '../../services/api';
+import api_url from '../../enviroment';
 import formatCardDate from '../../util/formatCardDate';
 import formatMainDate from '../../util/formatMainDate';
 
@@ -46,11 +47,12 @@ function Dashboard({ isFocused }) {
         return {
           ...meetup,
           dateFormatted: formatCardDate(meetup.date),
-          banner_url: meetup.file.url.replace('localhost', '10.0.3.2'),
+          banner_url: meetup.file.url.replace('localhost', api_url),
           past: isBefore(parseISO(meetup.date), new Date()),
         };
       });
 
+      console.tron.log(data);
       setMeetups([...meetups, ...data]);
       setLoading(false);
     }

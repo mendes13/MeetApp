@@ -1,7 +1,4 @@
 import React from 'react';
-import { Alert } from 'react-native';
-
-import api from '../../services/api';
 
 import {
   Container,

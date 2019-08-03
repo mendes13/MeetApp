@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { withNavigationFocus } from 'react-navigation';
 import { Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import api from '../../services/api';
+import api_url from '../../enviroment';
 import formatCardDate from '../../util/formatCardDate';
 
 import Background from '../../components/Background';
@@ -26,10 +28,11 @@ function Subscriptions({ isFocused }) {
           dateFormatted: formatCardDate(subscription.meetup.date),
           banner_url: subscription.meetup.file.url.replace(
             'localhost',
-            '10.0.3.2'
+            api_url
           ),
         };
       });
+      console.tron.log(data.banner_url);
       setSubscriptions(data);
     }
 
@@ -73,6 +76,10 @@ Subscriptions.navigationOptions = {
   tabBarIcon: ({ tintColor }) => (
     <Icon name="local-offer" size={20} color={tintColor} />
   ),
+};
+
+Subscriptions.propTypes = {
+  isFocused: PropTypes.bool.isRequired,
 };
 
 export default withNavigationFocus(Subscriptions);
