@@ -4,8 +4,8 @@ import { withNavigationFocus } from 'react-navigation';
 import { Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import Config from 'react-native-config';
 import api from '../../services/api';
-import api_url from '../../enviroment';
 import formatCardDate from '../../util/formatCardDate';
 
 import Background from '../../components/Background';
@@ -26,13 +26,16 @@ function Subscriptions({ isFocused }) {
           ...subscription.meetup,
           id: subscription.id,
           dateFormatted: formatCardDate(subscription.meetup.date),
-          banner_url: subscription.meetup.file.url.replace(
-            'localhost',
-            api_url
-          ),
+          file: {
+            ...subscription.meetup.file,
+            url: subscription.meetup.file.url.replace(
+              'localhost',
+              Config.API_HOST
+            ),
+          },
         };
       });
-      console.tron.log(data.banner_url);
+
       setSubscriptions(data);
     }
 
@@ -71,11 +74,17 @@ function Subscriptions({ isFocused }) {
   );
 }
 
+const tabBarIcon = ({ tintColor }) => (
+  <Icon name="local-offer" size={20} color={tintColor} />
+);
+
+tabBarIcon.propTypes = {
+  tintColor: PropTypes.string.isRequired,
+};
+
 Subscriptions.navigationOptions = {
   tabBarLabel: 'Inscrições',
-  tabBarIcon: ({ tintColor }) => (
-    <Icon name="local-offer" size={20} color={tintColor} />
-  ),
+  tabBarIcon,
 };
 
 Subscriptions.propTypes = {

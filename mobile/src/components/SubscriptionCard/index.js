@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import {
   Container,
@@ -14,7 +15,7 @@ import {
 export default function Card({ subscription, onUnsubscription }) {
   return (
     <Container>
-      <Banner source={{ uri: subscription.banner_url }} />
+      <Banner source={{ uri: subscription.file.url }} />
       <Wrapper>
         <Title>{subscription.title}</Title>
         <Information>
@@ -39,3 +40,19 @@ export default function Card({ subscription, onUnsubscription }) {
     </Container>
   );
 }
+
+Card.propTypes = {
+  subscription: PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string,
+    dateFormatted: PropTypes.string,
+    location: PropTypes.string,
+    organizer: PropTypes.shape({
+      name: PropTypes.string,
+    }),
+    file: PropTypes.shape({
+      url: PropTypes.string,
+    }),
+  }).isRequired,
+  onUnsubscription: PropTypes.func.isRequired,
+};

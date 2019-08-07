@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import {
   Container,
@@ -14,7 +15,7 @@ import {
 export default function Card({ meetup, onSubscription }) {
   return (
     <Container>
-      <Banner source={{ uri: meetup.banner_url }} />
+      <Banner source={{ uri: meetup.file.url }} />
       <Wrapper>
         <Title>{meetup.title}</Title>
         <Information>
@@ -41,3 +42,21 @@ export default function Card({ meetup, onSubscription }) {
     </Container>
   );
 }
+
+Card.propTypes = {
+  meetup: PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string,
+    dateFormatted: PropTypes.string,
+    location: PropTypes.string,
+    subscribed: PropTypes.bool,
+    past: PropTypes.bool,
+    organizer: PropTypes.shape({
+      name: PropTypes.string,
+    }),
+    file: PropTypes.shape({
+      url: PropTypes.string,
+    }),
+  }).isRequired,
+  onSubscription: PropTypes.func.isRequired,
+};

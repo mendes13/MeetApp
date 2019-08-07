@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { TouchableOpacity, Alert } from 'react-native';
+import PropTypes from 'prop-types';
 import { withNavigationFocus } from 'react-navigation';
 import { addDays, subDays, isBefore, parseISO } from 'date-fns';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import Config from 'react-native-config';
 import api from '../../services/api';
-import api_url from '../../enviroment';
 import formatCardDate from '../../util/formatCardDate';
 import formatMainDate from '../../util/formatMainDate';
 
@@ -35,10 +36,14 @@ function Dashboard({ isFocused }) {
     async function loadMeetups() {
       if (!isFocused) {
         setMeetups([]);
+        setPage(1);
         return;
       }
 
-      setLoading(true);
+      if (page === 1) {
+        setLoading(true);
+      }
+
       const response = await api.get('meetups', {
         params: { date, page },
       });
@@ -47,12 +52,14 @@ function Dashboard({ isFocused }) {
         return {
           ...meetup,
           dateFormatted: formatCardDate(meetup.date),
-          banner_url: meetup.file.url.replace('localhost', api_url),
+          file: {
+            ...meetup.file,
+            url: meetup.file.url.replace('localhost', Config.API_HOST),
+          },
           past: isBefore(parseISO(meetup.date), new Date()),
         };
       });
 
-      console.tron.log(data);
       setMeetups([...meetups, ...data]);
       setLoading(false);
     }
@@ -62,9 +69,9 @@ function Dashboard({ isFocused }) {
   }, [date, page, isFocused]);
 
   // Infinite scroll functionality
-  async function loadMore() {
-    // To prevent unecessary loading - If meetups.length / 10 !== 0, it means that there isn't anything more to fetch - because the pagination limit is 10!
-    if (meetups.length / 10 === 0) {
+  async function handleEndReached() {
+    // To prevent unecessary loading - If meetups.length % 10 !== 0, it means that there isn't anything more to fetch - because the pagination limit is 10!
+    if (meetups.length % 10 === 0) {
       setPage(page + 1);
     }
   }
@@ -121,8 +128,8 @@ function Dashboard({ isFocused }) {
             renderItem={({ item }) => (
               <Card meetup={item} onSubscription={handleSubscription} />
             )}
-            onEndReachedThreshold={0.1}
-            onEndReached={loadMore}
+            onEndReachedThreshold={0.2}
+            onEndReached={handleEndReached}
           />
         </Container>
       )}
@@ -130,11 +137,21 @@ function Dashboard({ isFocused }) {
   );
 }
 
+const tabBarIcon = ({ tintColor }) => (
+  <Icon name="format-list-bulleted" size={20} color={tintColor} />
+);
+
+tabBarIcon.propTypes = {
+  tintColor: PropTypes.string.isRequired,
+};
+
 Dashboard.navigationOptions = {
   tabBarLabel: 'Meetups',
-  tabBarIcon: ({ tintColor }) => (
-    <Icon name="format-list-bulleted" size={20} color={tintColor} />
-  ),
+  tabBarIcon,
+};
+
+Dashboard.propTypes = {
+  isFocused: PropTypes.bool.isRequired,
 };
 
 export default withNavigationFocus(Dashboard);
