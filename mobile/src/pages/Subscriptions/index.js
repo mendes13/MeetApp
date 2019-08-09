@@ -19,24 +19,26 @@ function Subscriptions({ isFocused }) {
 
   useEffect(() => {
     async function loadSubscriptions() {
-      const response = await api.get('subscriptions');
+      try {
+        const response = await api.get('subscriptions');
 
-      const data = response.data.map(subscription => {
-        return {
-          ...subscription.meetup,
-          id: subscription.id,
-          dateFormatted: formatCardDate(subscription.meetup.date),
-          file: {
-            ...subscription.meetup.file,
-            url: subscription.meetup.file.url.replace(
-              'localhost',
-              Config.API_HOST
-            ),
-          },
-        };
-      });
+        const data = response.data.map(subscription => {
+          return {
+            ...subscription.meetup,
+            id: subscription.id,
+            dateFormatted: formatCardDate(subscription.meetup.date),
+            file: {
+              ...subscription.meetup.file,
+              url: subscription.meetup.file.url.replace(
+                'localhost',
+                Config.API_HOST
+              ),
+            },
+          };
+        });
 
-      setSubscriptions(data);
+        setSubscriptions(data);
+      } catch (err) {}
     }
 
     loadSubscriptions();

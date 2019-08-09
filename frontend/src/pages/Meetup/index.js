@@ -28,8 +28,6 @@ function Meetup({ match }) {
         formattedDate: formatDate(response.data.meetup.date),
       };
 
-      console.tron.log(data.description);
-
       setMeetup(data);
       setLoading(false);
     }

@@ -44,24 +44,28 @@ function Dashboard({ isFocused }) {
         setLoading(true);
       }
 
-      const response = await api.get('meetups', {
-        params: { date, page },
-      });
+      try {
+        const response = await api.get('meetups', {
+          params: { date, page },
+        });
 
-      const data = response.data.map(meetup => {
-        return {
-          ...meetup,
-          dateFormatted: formatCardDate(meetup.date),
-          file: {
-            ...meetup.file,
-            url: meetup.file.url.replace('localhost', Config.API_HOST),
-          },
-          past: isBefore(parseISO(meetup.date), new Date()),
-        };
-      });
+        const data = response.data.map(meetup => {
+          return {
+            ...meetup,
+            dateFormatted: formatCardDate(meetup.date),
+            file: {
+              ...meetup.file,
+              url: meetup.file.url.replace('localhost', Config.API_HOST),
+            },
+            past: isBefore(parseISO(meetup.date), new Date()),
+          };
+        });
 
-      setMeetups([...meetups, ...data]);
-      setLoading(false);
+        setMeetups([...meetups, ...data]);
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+      }
     }
 
     loadMeetups();

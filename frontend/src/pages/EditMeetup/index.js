@@ -61,7 +61,6 @@ function EditMeetup({ match, location: { state } }) {
 
   async function handleSubmit({ file_id, title, description, date, location }) {
     try {
-      console.tron.log(description);
       const response = await api.put(`meetups/${id}`, {
         file_id,
         title,
@@ -76,7 +75,6 @@ function EditMeetup({ match, location: { state } }) {
       toast.error(
         'Houve algum erro. Verifique se você já tem algum Meetup marcado no horário!'
       );
-      console.tron.log(err);
     }
   }
 

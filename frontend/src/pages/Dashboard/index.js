@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MdAddCircleOutline, MdChevronRight } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 import api from '../../services/api';
 import formatDate from '../../util/formatDate';
@@ -15,18 +16,22 @@ function Dashboard() {
 
   useEffect(() => {
     async function loadMeetups() {
-      const response = await api.get('organizer');
+      try {
+        const response = await api.get('organizer');
 
-      const data = response.data.map(meetup => {
-        return {
-          ...meetup,
-          url: `meetup/${meetup.id}`,
-          formattedDate: formatDate(meetup.date),
-        };
-      });
+        const data = response.data.map(meetup => {
+          return {
+            ...meetup,
+            url: `meetup/${meetup.id}`,
+            formattedDate: formatDate(meetup.date),
+          };
+        });
 
-      setMeetups(data);
-      setLoading(false);
+        setMeetups(data);
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+      }
     }
 
     loadMeetups();
