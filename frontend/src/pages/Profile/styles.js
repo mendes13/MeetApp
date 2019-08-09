@@ -23,6 +23,13 @@ export const Container = styled.div`
       }
     }
 
+    span {
+      color: #fa1b41;
+      margin-bottom: 10px;
+      align-self: flex-start;
+      font-weight: bold;
+    }
+
     hr {
       height: 1px;
       background: rgba(255, 255, 255, 0.2);
