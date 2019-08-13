@@ -16,7 +16,8 @@ api.interceptors.response.use(null, async err => {
   if (status === 401 && error === 'Invalid Token') {
     store.dispatch(signOut());
   }
-  return error;
+
+  return Promise.reject(err);
 });
 
 export default api;

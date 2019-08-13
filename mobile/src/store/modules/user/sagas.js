@@ -26,7 +26,7 @@ export function* updateProfile({ payload }) {
       'Erro ao atualizar perfil',
       'Confira as suas credenciais e tente novamente!'
     );
-    updateProfileFailure();
+    yield put(updateProfileFailure());
   }
 }
 

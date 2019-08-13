@@ -32,11 +32,13 @@ export function* signIn({ payload }) {
 export function* signUp({ payload }) {
   try {
     const { name, email, password } = payload;
-    yield call(api.post, 'users', {
+    const response = yield call(api.post, 'users', {
       name,
       email,
       password,
     });
+
+    console.tron.log(response);
 
     Alert.alert('Sucesso!', 'Usuário cadastrado com sucesso');
     NavigationService.navigate('SignIn');

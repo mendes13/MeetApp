@@ -31,6 +31,7 @@ export default function user(state = INITIAL_STATE, action) {
 
       case '@user/UPDATE_PROFILE_FAILURE': {
         draft.loading = false;
+        console.tron.log('O reducer ouviu');
         break;
       }
 

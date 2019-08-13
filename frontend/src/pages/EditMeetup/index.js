@@ -27,17 +27,6 @@ function EditMeetup({ match, location: { state } }) {
   const [meetup, setMeetup] = useState();
   const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   async function loadMeetup() {
-  //     const response = await api.get(`/meetups/${id}`);
-
-  //     console.tron.log(response.data.meetup);
-  //     setMeetup(response.data.meetup);
-  //     setLoading(false);
-  //   }
-  //   loadMeetup();
-  // }, [id]);
-
   useEffect(() => {
     async function loadMeetup() {
       const response = await api.get(`/meetups/${id}`);
